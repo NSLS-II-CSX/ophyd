@@ -4,15 +4,12 @@
 from __future__ import print_function
 import sys
 import logging
-import signal
 import warnings
 
 import epics
 
 import atexit
 from ophyd.utils.epics_pvs import MonitorDispatcher
-
-from pyOlog.OlogHandler import OlogHandler
 
 LOG_FORMAT = "%(asctime)-15s [%(name)5s:%(levelname)s] %(message)s"
 OPHYD_LOGGER = 'ophyd_session'
@@ -77,11 +74,6 @@ def setup_loggers(logger_names, fmt=LOG_FORMAT):
         logger.addHandler(handler)
         logger.setLevel(logging.DEBUG)
 
-        olog_handler = OlogHandler()
-        olog_handler.setLevel(logging.INFO)
-        logger.addHandler(olog_handler)
-
-
 # setup logging
 setup_loggers((OPHYD_LOGGER, ))
 logger = logging.getLogger(OPHYD_LOGGER)
@@ -96,7 +88,7 @@ def load_ipython_extension(ipython):
     setup_epics()
 
     from .sessionmgr import SessionManager
-    #SessionManager will insert itself into ipython user namespace
+    # SessionManager will insert itself into ipython user namespace
     session_mgr = SessionManager(logger=logger, ipy=ipython)
 
     # import caget, caput, camonitor, cainfo
